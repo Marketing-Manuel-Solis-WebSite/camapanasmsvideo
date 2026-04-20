@@ -5,18 +5,10 @@ import EngagementTracker from "@/components/EngagementTracker";
 
 const VIDEO_URL = process.env.NEXT_PUBLIC_VIDEO_URL ?? "";
 const VIDEO_POSTER = process.env.NEXT_PUBLIC_VIDEO_POSTER ?? "";
-const CTA_KEYWORD = process.env.NEXT_PUBLIC_CTA_KEYWORD ?? "SÍ";
-const CTA_NUMBER_DISPLAY =
-  process.env.NEXT_PUBLIC_CTA_NUMBER ?? "55 0000 0000";
-const CTA_NUMBER_RAW =
-  process.env.NEXT_PUBLIC_CTA_NUMBER_RAW ??
-  CTA_NUMBER_DISPLAY.replace(/\s+/g, "");
 const SITE_URL = "manuelsolis.com";
 const SITE_HREF = "https://manuelsolis.com";
 
 export default function Home() {
-  const smsHref = `sms:${CTA_NUMBER_RAW}?&body=${encodeURIComponent(CTA_KEYWORD)}`;
-
   return (
     <div className="relative flex min-h-dvh w-full justify-center bg-background">
       <EngagementTracker />
@@ -131,85 +123,20 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Reassurance */}
+          {/* Mensaje de acompañamiento */}
           <div className="fade-up fade-up-3 mt-12 text-center">
-            <p
-              className="font-display text-[22px] font-light italic leading-[1.35] text-[color:var(--color-navy)]"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              “No estás solo. Estamos aquí para ti.”
-            </p>
-            <p className="mt-3 text-[12px] uppercase tracking-[0.32em] text-accent">
-              Manuel Solis
-            </p>
-          </div>
-
-          {/* Text-only CTA */}
-          <div className="fade-up fade-up-4 mt-12 text-center">
             <div
               aria-hidden
               className="mx-auto mb-8 h-px w-16 bg-[color:var(--color-hairline)]"
             />
-            <p className="text-[11px] uppercase tracking-[0.4em] text-muted">
-              Para hablar con nosotros
-            </p>
-
-            <p
-              className="mt-6 font-display text-[22px] font-light leading-[1.35] text-[color:var(--color-navy)]"
+            <p className="mx-auto max-w-[340px] font-display text-[20px] font-light leading-[1.4] text-[color:var(--color-navy)]"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Responde la palabra
+              Ante cualquier duda, puedes contactar a tu{" "}
+              <em className="italic shimmer-gold">case manager</em>.
             </p>
-            <p
-              className="mt-3 font-display text-[60px] font-light italic leading-none tracking-tight"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              <span className="shimmer-gold">{CTA_KEYWORD}</span>
-            </p>
-            <p
-              className="mt-5 font-display text-[18px] font-light leading-[1.4] text-[color:var(--color-navy)]/90"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              por mensaje de texto al
-            </p>
-            <TrackedLink
-              event="cta_sms_click"
-              properties={{ number: CTA_NUMBER_RAW, keyword: CTA_KEYWORD }}
-              href={smsHref}
-              className="mt-2 inline-block font-mono text-[20px] tracking-[0.14em] text-[color:var(--color-navy)] no-underline transition-opacity hover:opacity-80 active:opacity-60"
-            >
-              {CTA_NUMBER_DISPLAY}
-            </TrackedLink>
-
-            <div className="mt-8 flex items-center justify-center gap-3">
-              <span
-                aria-hidden
-                className="h-px w-8 bg-[color:var(--color-hairline)]"
-              />
-              <span className="text-[10px] uppercase tracking-[0.4em] text-muted">
-                o visita
-              </span>
-              <span
-                aria-hidden
-                className="h-px w-8 bg-[color:var(--color-hairline)]"
-              />
-            </div>
-
-            <TrackedLink
-              event="cta_website_click"
-              properties={{ destination: SITE_HREF, location: "cta" }}
-              href={SITE_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-block font-display text-[28px] font-light tracking-tight text-[color:var(--color-navy)] no-underline transition-opacity hover:opacity-80 active:opacity-60"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              <span className="shimmer-gold">{SITE_URL}</span>
-            </TrackedLink>
-            <p className="mt-3 text-[13px] leading-relaxed text-muted">
-              Tu caso nos importa.
-              <br />
-              Estamos listos para atenderte hoy.
+            <p className="mx-auto mt-4 max-w-[320px] text-[14px] leading-relaxed text-muted">
+              Estamos para escucharte, orientarte y acompañarte en cada etapa de tu proceso.
             </p>
           </div>
         </section>
