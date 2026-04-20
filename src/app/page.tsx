@@ -1,14 +1,26 @@
 import Image from "next/image";
+import VideoPlayer from "@/components/VideoPlayer";
+import TrackedLink from "@/components/TrackedLink";
+import EngagementTracker from "@/components/EngagementTracker";
 
 const VIDEO_URL = process.env.NEXT_PUBLIC_VIDEO_URL ?? "";
 const VIDEO_POSTER = process.env.NEXT_PUBLIC_VIDEO_POSTER ?? "";
 const CTA_KEYWORD = process.env.NEXT_PUBLIC_CTA_KEYWORD ?? "SÍ";
-const CTA_NUMBER = process.env.NEXT_PUBLIC_CTA_NUMBER ?? "55 0000 0000";
+const CTA_NUMBER_DISPLAY =
+  process.env.NEXT_PUBLIC_CTA_NUMBER ?? "55 0000 0000";
+const CTA_NUMBER_RAW =
+  process.env.NEXT_PUBLIC_CTA_NUMBER_RAW ??
+  CTA_NUMBER_DISPLAY.replace(/\s+/g, "");
 const SITE_URL = "manuelsolis.com";
+const SITE_HREF = "https://manuelsolis.com";
 
 export default function Home() {
+  const smsHref = `sms:${CTA_NUMBER_RAW}?&body=${encodeURIComponent(CTA_KEYWORD)}`;
+
   return (
     <div className="relative flex min-h-dvh w-full justify-center bg-background">
+      <EngagementTracker />
+
       <main className="relative z-10 flex w-full max-w-[430px] flex-col bg-background">
         {/* Navy header with logo */}
         <header className="relative overflow-hidden bg-[color:var(--color-navy)] px-6 pb-10 pt-12 text-center">
@@ -52,9 +64,11 @@ export default function Home() {
               listos para tu caso.
             </h1>
             <p className="mx-auto mt-5 max-w-[320px] text-[15px] leading-relaxed text-muted">
-              En <span className="font-medium text-[color:var(--color-navy)]">Law
-              Offices of Manuel Solis</span> te escuchamos, te acompañamos y
-              defendemos lo que más te importa.
+              En{" "}
+              <span className="font-medium text-[color:var(--color-navy)]">
+                Law Offices of Manuel Solis
+              </span>{" "}
+              te escuchamos y te acompañamos en cada paso de tu caso.
             </p>
           </div>
 
@@ -81,17 +95,7 @@ export default function Home() {
               <div className="overflow-hidden rounded-[2px] bg-[color:var(--color-navy)] shadow-[0_30px_70px_-28px_rgba(10,31,61,0.35)] ring-1 ring-[color:var(--color-hairline)]">
                 <div className="relative aspect-[9/16] w-full">
                   {VIDEO_URL ? (
-                    <video
-                      className="absolute inset-0 h-full w-full object-cover"
-                      src={VIDEO_URL}
-                      poster={VIDEO_POSTER || undefined}
-                      controls
-                      playsInline
-                      preload="metadata"
-                      aria-label="Mensaje en video de Law Offices of Manuel Solis"
-                    >
-                      Tu navegador no puede reproducir el video.
-                    </video>
+                    <VideoPlayer src={VIDEO_URL} poster={VIDEO_POSTER} />
                   ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-[#0a1f3d] to-[#06152a] text-center">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full border border-accent/50 bg-black/30">
@@ -167,9 +171,14 @@ export default function Home() {
             >
               por mensaje de texto al
             </p>
-            <p className="mt-2 font-mono text-[20px] tracking-[0.14em] text-[color:var(--color-navy)]">
-              {CTA_NUMBER}
-            </p>
+            <TrackedLink
+              event="cta_sms_click"
+              properties={{ number: CTA_NUMBER_RAW, keyword: CTA_KEYWORD }}
+              href={smsHref}
+              className="mt-2 inline-block font-mono text-[20px] tracking-[0.14em] text-[color:var(--color-navy)] no-underline transition-opacity hover:opacity-80 active:opacity-60"
+            >
+              {CTA_NUMBER_DISPLAY}
+            </TrackedLink>
 
             <div className="mt-8 flex items-center justify-center gap-3">
               <span
@@ -185,12 +194,17 @@ export default function Home() {
               />
             </div>
 
-            <p
-              className="mt-6 font-display text-[28px] font-light tracking-tight text-[color:var(--color-navy)]"
+            <TrackedLink
+              event="cta_website_click"
+              properties={{ destination: SITE_HREF, location: "cta" }}
+              href={SITE_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block font-display text-[28px] font-light tracking-tight text-[color:var(--color-navy)] no-underline transition-opacity hover:opacity-80 active:opacity-60"
               style={{ fontFamily: "var(--font-display)" }}
             >
               <span className="shimmer-gold">{SITE_URL}</span>
-            </p>
+            </TrackedLink>
             <p className="mt-3 text-[13px] leading-relaxed text-muted">
               Tu caso nos importa.
               <br />
@@ -214,13 +228,19 @@ export default function Home() {
             aria-hidden
             className="mx-auto my-5 h-px w-12 bg-[color:var(--color-hairline-on-dark)]"
           />
-          <p className="text-[11px] leading-relaxed text-white/70">
+          <TrackedLink
+            event="cta_website_click"
+            properties={{ destination: SITE_HREF, location: "footer" }}
+            href={SITE_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] leading-relaxed text-white/70 no-underline"
+          >
             {SITE_URL}
-          </p>
+          </TrackedLink>
           <p className="mx-auto mt-4 max-w-[300px] text-[10px] leading-relaxed text-white/40">
-            Este mensaje fue enviado únicamente a ti. Aplican tarifas
-            estándar de mensajería. La información aquí no constituye asesoría
-            legal.
+            Este mensaje fue enviado únicamente a ti. Aplican tarifas estándar
+            de mensajería. La información aquí no constituye asesoría legal.
           </p>
         </footer>
       </main>
