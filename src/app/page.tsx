@@ -56,19 +56,20 @@ export default function Home() {
           {/* Headline */}
           <div className="fade-up fade-up-1 mt-10 text-center">
             <h1
-              className="text-balance font-display text-[38px] font-light leading-[1.08] tracking-tight text-[color:var(--color-navy)]"
+              className="text-balance font-display text-[34px] font-light leading-[1.1] tracking-tight text-[color:var(--color-navy)]"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Estamos <em className="italic shimmer-gold">contigo</em>,
+              Tu caso nos <em className="italic shimmer-gold">importa</em>.
               <br />
-              listos para tu caso.
+              Hoy lo demostramos con una historia real de{" "}
+              <span className="whitespace-nowrap">Visa T</span>.
             </h1>
             <p className="mx-auto mt-5 max-w-[320px] text-[15px] leading-relaxed text-muted">
               En{" "}
               <span className="font-medium text-[color:var(--color-navy)]">
-                Law Offices of Manuel Solis
-              </span>{" "}
-              te escuchamos y te acompañamos en cada paso de tu caso.
+                Law Offices of Manuel Solís
+              </span>
+              , trabajamos con la transparencia y profesionalismo que mereces.
             </p>
           </div>
 

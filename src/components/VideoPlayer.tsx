@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 
 type Props = {
@@ -20,6 +20,8 @@ export default function VideoPlayer({ src, poster }: Props) {
   const milestonesReached = useRef<Set<number>>(new Set());
   const hasStarted = useRef(false);
   const embed = isEmbedUrl(src);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     if (embed) {
@@ -30,7 +32,24 @@ export default function VideoPlayer({ src, poster }: Props) {
     const video = videoRef.current;
     if (!video) return;
 
+    video.muted = true;
+    const attemptPlay = () => {
+      const p = video.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => {
+          // Autoplay blocked; user will tap play.
+        });
+      }
+    };
+
+    if (video.readyState >= 2) {
+      attemptPlay();
+    } else {
+      video.addEventListener("loadeddata", attemptPlay, { once: true });
+    }
+
     const onPlay = () => {
+      setIsPlaying(true);
       if (!hasStarted.current) {
         hasStarted.current = true;
         track("video_start", { src });
@@ -41,6 +60,7 @@ export default function VideoPlayer({ src, poster }: Props) {
     };
 
     const onPause = () => {
+      setIsPlaying(false);
       if (video.ended) return;
       track("video_pause", {
         at_seconds: Math.round(video.currentTime),
@@ -51,6 +71,7 @@ export default function VideoPlayer({ src, poster }: Props) {
     };
 
     const onEnded = () => {
+      setIsPlaying(false);
       track("video_complete", {
         duration_seconds: Math.round(video.duration || 0),
       });
@@ -70,6 +91,7 @@ export default function VideoPlayer({ src, poster }: Props) {
     };
 
     const onVolumeChange = () => {
+      setIsMuted(video.muted);
       if (!video.muted && hasStarted.current) {
         track("video_unmute", {
           at_seconds: Math.round(video.currentTime),
@@ -92,6 +114,7 @@ export default function VideoPlayer({ src, poster }: Props) {
     video.addEventListener("error", onError);
 
     return () => {
+      video.removeEventListener("loadeddata", attemptPlay);
       video.removeEventListener("play", onPlay);
       video.removeEventListener("pause", onPause);
       video.removeEventListener("ended", onEnded);
@@ -100,6 +123,20 @@ export default function VideoPlayer({ src, poster }: Props) {
       video.removeEventListener("error", onError);
     };
   }, [src, embed]);
+
+  const handleUnmute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    if (video.volume === 0) video.volume = 1;
+    if (video.paused) {
+      const p = video.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => undefined);
+      }
+    }
+    setIsMuted(false);
+  };
 
   if (embed) {
     return (
@@ -117,17 +154,53 @@ export default function VideoPlayer({ src, poster }: Props) {
   }
 
   return (
-    <video
-      ref={videoRef}
-      className="absolute inset-0 h-full w-full object-cover"
-      src={src}
-      poster={poster || undefined}
-      controls
-      playsInline
-      preload="metadata"
-      aria-label="Mensaje en video de Law Offices of Manuel Solis"
-    >
-      Tu navegador no puede reproducir el video.
-    </video>
+    <>
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        src={src}
+        poster={poster || undefined}
+        controls
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        aria-label="Mensaje en video de Law Offices of Manuel Solis"
+      >
+        Tu navegador no puede reproducir el video.
+      </video>
+
+      {isMuted && isPlaying ? (
+        <button
+          type="button"
+          onClick={handleUnmute}
+          className="absolute inset-0 z-10 flex cursor-pointer flex-col items-center justify-center gap-3 bg-black/25 text-white transition-opacity hover:bg-black/35"
+          aria-label="Activar sonido del video"
+        >
+          <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/70 bg-black/40 backdrop-blur-sm">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-7 w-7"
+              aria-hidden
+            >
+              <path
+                d="M4 9v6h4l5 4V5L8 9H4z"
+                fill="currentColor"
+              />
+              <path
+                d="M16 8l5 8M21 8l-5 8"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </span>
+          <span className="text-[11px] font-medium uppercase tracking-[0.32em]">
+            Toca para activar sonido
+          </span>
+        </button>
+      ) : null}
+    </>
   );
 }
