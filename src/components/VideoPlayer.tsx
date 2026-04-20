@@ -8,13 +8,26 @@ type Props = {
   poster?: string;
 };
 
+function isEmbedUrl(src: string) {
+  return /embed\.aspx|sharepoint\.com|stream\.microsoft|youtube\.com\/embed|player\.vimeo/i.test(
+    src,
+  );
+}
+
 export default function VideoPlayer({ src, poster }: Props) {
-  const ref = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const milestonesReached = useRef<Set<number>>(new Set());
   const hasStarted = useRef(false);
+  const embed = isEmbedUrl(src);
 
   useEffect(() => {
-    const video = ref.current;
+    if (embed) {
+      track("video_embed_view", { src });
+      return;
+    }
+
+    const video = videoRef.current;
     if (!video) return;
 
     const onPlay = () => {
@@ -86,11 +99,26 @@ export default function VideoPlayer({ src, poster }: Props) {
       video.removeEventListener("volumechange", onVolumeChange);
       video.removeEventListener("error", onError);
     };
-  }, [src]);
+  }, [src, embed]);
+
+  if (embed) {
+    return (
+      <iframe
+        ref={iframeRef}
+        className="absolute inset-0 h-full w-full border-0"
+        src={src}
+        title="Mensaje en video de Law Offices of Manuel Solis"
+        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
+    );
+  }
 
   return (
     <video
-      ref={ref}
+      ref={videoRef}
       className="absolute inset-0 h-full w-full object-cover"
       src={src}
       poster={poster || undefined}
