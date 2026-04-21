@@ -86,7 +86,7 @@ export default function Home() {
               />
 
               <div className="overflow-hidden rounded-[2px] bg-[color:var(--color-navy)] shadow-[0_30px_70px_-28px_rgba(10,31,61,0.35)] ring-1 ring-[color:var(--color-hairline)]">
-                <div className="relative aspect-[9/16] w-full">
+                <div className="relative aspect-video w-full">
                   {VIDEO_URL ? (
                     <VideoPlayer src={VIDEO_URL} poster={VIDEO_POSTER} />
                   ) : (
