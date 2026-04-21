@@ -51,17 +51,14 @@ export default function Home() {
               className="text-balance font-display text-[34px] font-light leading-[1.1] tracking-tight text-[color:var(--color-navy)]"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Tu caso nos <em className="italic shimmer-gold">importa</em>.
-              <br />
-              Hoy lo demostramos con una historia real de{" "}
-              <span className="whitespace-nowrap">Visa T</span>.
+              Conoce tus <em className="italic shimmer-gold">opciones legales</em>.
             </h1>
             <p className="mx-auto mt-5 max-w-[320px] text-[15px] leading-relaxed text-muted">
               En{" "}
               <span className="font-medium text-[color:var(--color-navy)]">
                 Law Offices of Manuel Solís
               </span>
-              , trabajamos con la transparencia y profesionalismo que mereces.
+              , +35 años de experiencia y 50,000 casos ganados nos respaldan.
             </p>
           </div>
 
