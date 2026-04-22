@@ -8,7 +8,6 @@ export default function EngagementTracker() {
     const startedAt = Date.now();
     const scrollReached = new Set<number>();
     const timeReached = new Set<number>();
-
     const onScroll = () => {
       const doc = document.documentElement;
       const scrollable = doc.scrollHeight - window.innerHeight;

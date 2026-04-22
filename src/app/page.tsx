@@ -15,7 +15,7 @@ export default function Home() {
 
       <main className="relative z-10 flex w-full max-w-[430px] flex-col bg-background">
         {/* Navy header with logo */}
-        <header className="relative overflow-hidden bg-[color:var(--color-navy)] px-6 pb-10 pt-12 text-center">
+        <header className="relative overflow-hidden bg-[color:var(--color-navy)] px-6 pb-8 pt-10 text-center">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-60"
@@ -31,9 +31,9 @@ export default function Home() {
               width={260}
               height={140}
               priority
-              className="h-auto w-[220px]"
+              className="h-auto w-[150px]"
             />
-            <p className="mt-5 inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.36em] text-accent-soft">
+            <p className="mt-4 inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.36em] text-accent-soft">
               <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent" />
               Un mensaje para ti
             </p>
