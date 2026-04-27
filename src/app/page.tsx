@@ -129,8 +129,8 @@ export default function Home() {
             <p className="mx-auto max-w-[340px] font-display text-[20px] font-light leading-[1.4] text-[color:var(--color-navy)]"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Ante cualquier duda, puedes contactar a tu{" "}
-              <em className="italic shimmer-gold">case manager</em>.
+              Ante cualquier duda, puedes contactar a {" "}
+              <em className="italic shimmer-gold">nuestro equipo</em>.
             </p>
             <p className="mx-auto mt-4 max-w-[320px] text-[14px] leading-relaxed text-muted">
               Estamos para escucharte, orientarte y acompañarte en cada etapa de tu proceso.
